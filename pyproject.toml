@@ -3,17 +3,15 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "local-sentiment-mlops"
+name = "sentiment-mlops"
 version = "0.1.0"
-description = "A reproducible local sentiment classification and serving project"
-requires-python = ">=3.11"
-
-[tool.setuptools]
-package-dir = {"" = "src"}
+description = "Reproducible binary sentiment classifier with MLflow, FastAPI and Docker"
+readme = "README.md"
+requires-python = ">=3.10"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+addopts = "-ra"

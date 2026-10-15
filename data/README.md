@@ -15,3 +15,17 @@
 The archive will be downloaded by `scripts/download_data.py` into `data/raw/`. Until that script is implemented, fetch the ZIP from the archive URL above and extract the three `*_labelled.txt` files into `data/raw/`. Do not commit the downloaded files; `.gitignore` excludes this directory. The training loader will validate the tab-separated text/label format and map the values to binary labels.
 
 This small, curated dataset is suitable for a transparent baseline, not a claim of production-grade sentiment coverage. Its source domains and collection period constrain generalization.
+
+
+
+
+# Dataset
+
+Sentiment Labelled Sentences (3,000 sentences from imdb, amazon, yelp; label 1 = positive, 0 = negative).
+
+- Source: https://archive.ics.uci.edu/dataset/331/sentiment+labelled+sentences
+- License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+- Citation: Kotzias, D. (2015). Sentiment Labelled Sentences [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C57604
+
+Raw files are not committed. Fetch them with `python scripts/download_data.py`.
+Processed splits and a manifest are written to `data/processed/` by `python -m sentiment.data`.
