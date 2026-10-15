@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Downloaded input data and generated model binaries
+/data/raw/*
+/models/*
+
+# Local tracking and runtime state
+/mlruns/
+*.log
+.env
