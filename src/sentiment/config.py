@@ -5,6 +5,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
+REPORTS_DIR = PROJECT_ROOT / "reports"
 
 DATASET_URL = (
     "https://archive.ics.uci.edu/static/public/331/"
@@ -20,3 +21,19 @@ RAW_FILES = {
 
 SEED = 42
 TEST_SIZE = 0.2
+CV_FOLDS = 5
+
+# Chosen a priori (common defaults), NOT tuned on the test set.
+TFIDF_PARAMS = {
+    "lowercase": True,
+    "ngram_range": (1, 2),
+    "min_df": 2,
+    "sublinear_tf": True,
+}
+LOGREG_PARAMS = {
+    "C": 1.0,
+    "max_iter": 1000,
+}
+
+
+MODELS_DIR = PROJECT_ROOT / "models"
