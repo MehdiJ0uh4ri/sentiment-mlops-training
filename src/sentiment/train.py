@@ -8,6 +8,7 @@ Leakage rules enforced here:
 """
 from __future__ import annotations
 
+import argparse
 import json
 import platform
 from pathlib import Path
@@ -178,7 +179,11 @@ def format_summary(results: dict) -> str:
     return "\n".join(lines)
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description="Train, evaluate, save and track the sentiment model.")
+    parser.add_argument("--no-track", action="store_true", help="skip MLflow tracking")
+    args = parser.parse_args(argv)
+
     split, manifest = load_split()
     results, pipeline = run_experiment(split, config.REPORTS_DIR, data_manifest=manifest)
     metadata = save_model(pipeline, config.MODELS_DIR, results)
@@ -188,6 +193,12 @@ def main() -> None:
         f"Saved model to {config.MODELS_DIR / MODEL_FILENAME} "
         f"(sha256 {metadata['model_sha256'][:12]}...)"
     )
+
+    if not args.no_track:
+        from sentiment.tracking import track_run  # lazy: only training runs need mlflow
+
+        run_id = track_run(results, pipeline, sample_texts=[e.text for e in split.test[:25]])
+        print(f"Logged MLflow run {run_id} in experiment '{config.MLFLOW_EXPERIMENT}'")
 
 
 if __name__ == "__main__":

@@ -37,3 +37,6 @@ LOGREG_PARAMS = {
 
 
 MODELS_DIR = PROJECT_ROOT / "models"
+MLFLOW_DB = Path.home() / ".local" / "share" / "sentiment-mlops" / "mlflow.db"
+MLFLOW_ARTIFACT_ROOT = PROJECT_ROOT / "mlartifacts"
+MLFLOW_EXPERIMENT = "sentiment-classifier"
