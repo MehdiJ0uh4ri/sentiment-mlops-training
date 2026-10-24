@@ -7,3 +7,10 @@ __pycache__
 mlruns
 reports
 data/raw
+*
+!requirements.lock.txt
+!src
+!models
+**/__pycache__
+**/*.pyc
+**/*.egg-info
