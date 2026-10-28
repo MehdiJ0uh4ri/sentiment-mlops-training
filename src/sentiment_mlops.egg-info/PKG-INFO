@@ -1,0 +1,107 @@
+Metadata-Version: 2.4
+Name: sentiment-mlops
+Version: 0.1.0
+Summary: Reproducible binary sentiment classifier with MLflow, FastAPI and Docker
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+
+# Local Sentiment MLOps
+
+A reproducible, local binary text-classification project built with scikit-learn, MLflow, FastAPI, Docker, and pytest. This repository is currently a scaffold; implementation is deliberately split into verified milestones.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    UCI[UCI labeled sentences] --> DL[Download and validate]
+    DL --> DATA[Raw local data]
+    DATA --> SPLIT[Stratified train/test split]
+    SPLIT --> PIPE[TF-IDF + classifier pipeline]
+    PIPE --> EVAL[Held-out precision, recall, F1, confusion matrix]
+    PIPE --> MLFLOW[Local MLflow run: params, metrics, artifacts]
+    PIPE --> MODEL[Persisted pipeline + metadata]
+    MODEL --> API[FastAPI: health + prediction]
+    API --> IMAGE[Docker image]
+    IMAGE --> TESTS[pytest + container smoke test]
+```
+
+Training and serving will use the same fitted scikit-learn `Pipeline`, so text vectorization is fitted only on training data and reused unchanged for inference. A fixed seed and stratified split make the baseline reproducible; package versions and dataset provenance will be recorded. Exact bit-for-bit reproducibility may still vary by platform and dependency/native-library builds.
+
+## Acceptance Criteria
+
+- [ ] Download the documented public dataset and validate text/label shape and values.
+- [ ] Reproducibly split data before fitting; keep all learned preprocessing inside the training pipeline.
+- [ ] Train a documented TF-IDF baseline and report precision, recall, F1, and confusion matrix without imposing an arbitrary score threshold.
+- [ ] Track parameters, metrics, and artifacts in local MLflow.
+- [ ] Save and reload the complete inference pipeline plus metadata.
+- [ ] Serve a health endpoint and a validated prediction endpoint with consistent preprocessing.
+- [ ] Build and run a Docker image; successfully request a prediction from the container.
+- [ ] Pass focused data/model/API pytest tests and a container smoke test.
+- [ ] Manually verify the train-to-container workflow and document commands, outputs, provenance, and limitations.
+
+## Weekend Roadmap
+
+1. **Environment and scaffold:** confirm Python/venv, Git, and Docker Desktop + WSL2; establish the project layout.
+2. **Data and baseline:** download the UCI data, validate it, split without leakage, and build the first training/evaluation tests.
+3. **Tracking and persistence:** log a local MLflow run, metrics/artifacts, and a loadable model with metadata.
+4. **Serving:** add FastAPI health/predict routes and API validation/tests against the saved pipeline.
+5. **Container and end-to-end:** build/run the image, smoke-test prediction, then complete manual verification and portfolio documentation.
+6. **Stretch only after the pipeline works:** GitHub Actions and lightweight monitoring. No cloud, Kubernetes, distributed training, or GPU work is in scope.
+
+## Repository Structure
+
+```text
+.github/workflows/        # reserved for optional CI
+ data/
+   raw/                    # downloaded dataset; not committed
+   README.md               # source, license, and fetch instructions
+ models/                   # generated model/metadata; not committed
+ reports/                  # evaluation outputs
+ scripts/                  # download and container smoke-test helpers
+ src/sentiment/            # configuration, data, training, evaluation, model I/O, API
+ tests/                    # data, model, and API tests
+ Dockerfile
+ .dockerignore
+ .gitignore
+ requirements.txt          # direct dependencies
+ requirements.lock.txt     # generated with pip freeze
+ pyproject.toml
+ README.md
+```
+
+## Environment Check (2026-10-15)
+
+Checks were run from `C:\Users\Mehdi\Desktop\portfolio` and the running WSL2 `Ubuntu` distribution:
+
+- Windows: Git 2.45.1 is available. `python`, `py`, and `docker` are not on PowerShell PATH.
+- WSL2: Ubuntu is running under WSL 2; Python 3.12.3 and Git 2.43.0 are available.
+- WSL2: `python3 -m pip` fails because pip is not installed; `python3 -m venv` reports that `python3.12-venv`/`ensurepip` is missing.
+- Docker Desktop's Windows CLI binary exists at `C:\Program Files\Docker\Docker\resources\bin\docker.exe`, but the Desktop process was not running. WSL Ubuntu has no `docker` command. Docker client/server connectivity is therefore unverified.
+
+Use WSL Ubuntu as the project environment. In the Ubuntu terminal, install the missing venv support, then verify the isolated interpreter:
+
+```bash
+sudo apt update
+sudo apt install -y python3.12-venv
+cd /mnt/c/Users/Mehdi/Desktop/portfolio/sentiment-mlops
+python3 -m venv .venv
+source .venv/bin/activate
+python --version
+python -m pip --version
+```
+
+Start Docker Desktop from Windows, then enable **Settings > Resources > WSL Integration > Ubuntu**. In WSL, run `docker version`; both Client and Server sections should be present. Docker Desktop's official WSL2 guidance: https://docs.docker.com/desktop/features/wsl/.
+
+Do not run training until these checks pass. No model, metrics, test result, or Docker build is claimed at this scaffold milestone.
+
+## Dataset
+
+The planned baseline uses UCI's [Sentiment Labelled Sentences](https://archive.ics.uci.edu/dataset/331/sentiment%2Blabelled%2Bsentences) dataset (3,000 positive/negative sentences; CC BY 4.0). See [data/README.md](data/README.md) for provenance and attribution. The downloaded archive will remain local under `data/raw/`.
+
+## Local Tracking and Commands
+
+The planned default is MLflow's local file-backed tracking store under `mlruns/`; it requires no hosted service. Exact install, train, evaluate, serve, Docker, and test commands will be added with their implementation milestones after environment verification.
+
+## License and Attribution
+
+The application code's license has not yet been selected. Dataset use must preserve the UCI/Kotzias attribution and comply with CC BY 4.0. See `data/README.md`.

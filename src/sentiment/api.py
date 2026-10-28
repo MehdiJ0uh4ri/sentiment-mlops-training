@@ -18,6 +18,7 @@ from sentiment import config
 from sentiment.model_io import LoadedModel, load_model
 from sentiment.predict import predict_texts
 
+
 MODELS_DIR_ENV = "SENTIMENT_MODELS_DIR"
 MAX_TEXT_CHARS = 2000
 

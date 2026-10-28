@@ -1,0 +1,29 @@
+{
+  "cleaning": {
+    "n_conflicting_removed": 0,
+    "n_exact_duplicates_removed": 21,
+    "n_final": 2979,
+    "n_raw": 3000
+  },
+  "raw_files_sha256": {
+    "amazon": "47003fc0a0d4840b00e96e715b6189bad09e7443a3da41c4cbe12ffc79f86ae3",
+    "imdb": "aef2e49e3da25714d61175e3a6e68eeef74a20a2f914318dc3be9947ea86512d",
+    "yelp": "c76468b7b5c6e56a0804d728345c5f84aa2142ddb214420f61cc9cfd4c00d2ea"
+  },
+  "seed": 42,
+  "test": {
+    "label_counts": {
+      "0": 298,
+      "1": 298
+    },
+    "n": 596
+  },
+  "test_size": 0.2,
+  "train": {
+    "label_counts": {
+      "0": 1193,
+      "1": 1190
+    },
+    "n": 2383
+  }
+}
